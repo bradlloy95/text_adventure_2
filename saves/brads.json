@@ -1,0 +1,100 @@
+{
+    "locations": {
+        "Bag end": {
+            "name": "Bag end",
+            "paths": {
+                "north": "No path",
+                "east": "The giant oak tree",
+                "south": "No path",
+                "west": "No path"
+            },
+            "items": []
+        },
+        "The giant oak tree": {
+            "name": "The giant oak tree",
+            "paths": {
+                "north": "No path",
+                "east": "Bindole wood entrance",
+                "south": "The market",
+                "west": "Bag end"
+            },
+            "items": []
+        },
+        "Bindole wood entrance": {
+            "name": "Bindole wood entrance",
+            "paths": {
+                "north": "No path",
+                "east": "No path",
+                "south": "No path",
+                "west": "The giant oak tree"
+            },
+            "items": []
+        },
+        "The flower Garden": {
+            "name": "The flower Garden",
+            "paths": {
+                "north": "No path",
+                "east": "The market",
+                "south": "No path",
+                "west": "No path"
+            },
+            "items": []
+        },
+        "The market": {
+            "name": "The market",
+            "paths": {
+                "north": "The giant oak tree",
+                "east": "The Dragon inn",
+                "south": "Stone bridge",
+                "west": "The flower Garden"
+            },
+            "items": []
+        },
+        "The Dragon inn": {
+            "name": "The Dragon inn",
+            "paths": {
+                "north": "No path",
+                "east": "No path",
+                "south": "River side path east",
+                "west": "The market"
+            },
+            "items": []
+        },
+        "River side path west": {
+            "name": "River side path west",
+            "paths": {
+                "north": "No path",
+                "east": "Stone bridge",
+                "south": "No path",
+                "west": "No path"
+            },
+            "items": []
+        },
+        "Stone bridge": {
+            "name": "Stone bridge",
+            "paths": {
+                "north": "The market",
+                "east": "River side path east",
+                "south": "No path",
+                "west": "River side path west"
+            },
+            "items": []
+        },
+        "River side path east": {
+            "name": "River side path east",
+            "paths": {
+                "north": "The Dragon inn",
+                "east": "No path",
+                "south": "No path",
+                "west": "Stone bridge"
+            },
+            "items": []
+        }
+    },
+    "player": {
+        "name": "Bradley",
+        "location": "The market"
+    },
+    "inventory": null,
+    "quests": null
+}

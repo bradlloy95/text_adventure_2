@@ -1,8 +1,12 @@
 import os
-import platform
-from initilize import initizile_objects
 
+
+from initilize import initizile_objects
 from player import Player
+from locations import Location
+from player import Player
+from utils import save_game, load_game, clear_terminal, yes_no
+import json
 
 def start():
     
@@ -18,15 +22,30 @@ def start():
         if user_input == "1":
             print("new game")
             player, locations = new_game()
-            break
-        elif user_input == "1":
+            print(f"Welcome to the shire {player.name}")
+            
+        # Load game
+        elif user_input == "2":
             clear_terminal()
             print("load game")
+            
+            player, locations, filename = load(get_filenames())
+            return player, locations, filename
             break
+        
+        # create save filename
+        while True:
+            save_name = input("Save file name > ")
+            print(f"Save file as '{save_name}")
+            print("Would you like to continue with this name?")
+            yes = yes_no()
+            
+            if yes:
+                save_name = f"{save_name}.json"
+                return player, locations, save_name
     # start game opening - will be new function
     
-    print(f"Welcome to the shire {player.name}")
-    return player, locations
+    
 def new_game():
     while True:
         clear_terminal()            
@@ -45,23 +64,49 @@ def new_game():
         # Check is name is correct
         print(f"Your name is {user_name}.")
         print("Would you like to continue with this name?")
-        print("1>   Yes")
-        print("2>   No")
-        user_input = input("> ")
+        user_input = yes_no()
         
-        if user_input == "1":
+        if user_input:
             clear_terminal()
             locations = initizile_objects()
             player = Player(user_name, locations[4])                      
             
             return player, locations
-        elif user_input == "2":
+        else:
             continue
-        
 
-def clear_terminal():
-    if platform.system() == "Windows":
-        os.system("cls")  # Windows command to clear the terminal
-    else:
-        os.system("clear")  # Unix/Linux/MacOS command to clear the terminal
-        
+def load(filenames):
+    while True:
+        label = 1
+        for save in filenames:
+            print(f"{label}>   {save}")
+            label += 1
+        print("Pick your save")
+        user_input = int(input("> "))
+        if 0 < user_input <= len(filenames):
+            print("yes")
+            save_file = filenames[user_input - 1]
+            player, locations, filename = load_game(filename=filenames[user_input - 1])
+            return player, locations, filename
+        else:
+            print("nio")
+
+def get_filenames(foldername = "saves"):
+    # Get the full path to the folder
+    folder_path = os.path.join(os.getcwd(), foldername)
+    
+    try:
+        # List all filenames in the folder
+        filenames = os.listdir(folder_path)
+        #print(f"Filenames in '{foldername}': {filenames}")
+        return filenames
+    except FileNotFoundError:
+        print(f"The folder '{foldername}' does not exist.")
+        return []
+    except Exception as e:
+        print(f"Error reading filenames from folder: {e}")
+        return []
+
+
+
+       
