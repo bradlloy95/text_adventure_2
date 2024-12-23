@@ -1,49 +1,69 @@
 from player import Player
 from locations import Location
-
+from start import clear_terminal, start, new_game
+from initilize import initizile_objects
+import json
 def main():
-    # initialize locations
-    # north west    
-    bagend = Location("Bag end") 
-    # north
-    giant_oak = Location("The giant oak tree")
-    # north east
-    bindole_wood_entrance = Location("Bindole wood entrance")
-    # west
-    flower_garden = Location("The flower Garden")
-    # middle
-    market = Location("The market")
-    # east
-    dragon_inn = Location("The Dragon inn")
-    # south west
-    riverside_path_west = Location("River side path west")
-    # south
-    stone_bridge = Location("Stone bridge")
-    #south east
-    riverside_path_east = Location("River side path east")
-
-    bagend.set_paths(east=giant_oak)
-
-    giant_oak.set_paths(east=bindole_wood_entrance,south=market ,west=bagend)
-
-    bindole_wood_entrance.set_paths(west=giant_oak)
-
-    flower_garden.set_paths(east=market)
-
-    market.set_paths(north=giant_oak, east=dragon_inn, south=stone_bridge, west=flower_garden)
-
-    dragon_inn.set_paths(south=riverside_path_east, west=market)
-
-    riverside_path_west.set_paths(east=stone_bridge)
-
-    stone_bridge.set_paths(north=market, east=riverside_path_east, west=riverside_path_west)
-
-    riverside_path_east.set_paths(north=dragon_inn, west=stone_bridge)
+    locations = initizile_objects()
+    #player, locations = load_game()
+    player_name = start()
+    player = Player(player_name, locations[4])
+    save_game(locations, player)
     
-    # initilise player
+def save_game(locations, player, inventory = None, quests= None, filename="savegame.json"):
+    # Convert locations to dictionaries
     
-    brad = Player("brad", market)
-    print(brad)
+    if isinstance(locations, list):
+        serialized_locations = {loc.name: loc.to_dict() for loc in locations}
+    else:
+        serialized_locations = {loc.name: loc.to_dict() for loc in locations.values()}
+    serialized_player = player.to_dict()
+    
+    # Save everything to a dictionary
+    game_state = {
+        "locations": serialized_locations,
+        "player": serialized_player,
+        "inventory": inventory,
+        "quests": quests
+    }
+    
+    # Write the game state to a JSON file
+    try:
+        with open(filename, "w") as save_file:
+            json.dump(game_state, save_file, indent=4)
+        print("Game saved successfully!")
+    except Exception as e:
+        print(f"Error saving game: {e}")
+
+def load_game(filename="savegame.json"):
+    try:
+        with open(filename, "r") as save_file:
+            game_state = json.load(save_file)
+        
+        # Reinitialize locations
+        locations = {name: Location.from_dict(data) for name, data in game_state["locations"].items()}
+        
+        # Reconnect locations (paths between rooms)
+        for loc in locations.values():
+            for direction, destination in loc.paths.items():
+                if destination != "No path":
+                    loc.paths[direction] = locations.get(destination, "No path")
+        
+        # Recreate the player
+        player_data = game_state["player"]
+        player = Player.from_dict(player_data, locations)
+        
+        print("Game loaded successfully!")
+        return player, locations
+            
+            
+    except FileNotFoundError:
+        print("No save file found. Starting a new game.")
+        return None, {}, [], {}
+    except Exception as e:
+        print(f"Error loading game: {e}")
+        return None, {}, [], {}
+
 
 if __name__ == "__main__":
     main()
