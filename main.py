@@ -4,13 +4,11 @@ from start import clear_terminal, start, new_game
 from initilize import initizile_objects
 import json
 def main():
-    locations = initizile_objects()
     #player, locations = load_game()
-    player_name = start()
-    player = Player(player_name, locations[4])
-    save_game(locations, player)
+    player, locations = start()
+    save_game(player, locations)
     
-def save_game(locations, player, inventory = None, quests= None, filename="savegame.json"):
+def save_game(player, locations, inventory = None, quests= None, filename="savegame.json"):
     # Convert locations to dictionaries
     
     if isinstance(locations, list):

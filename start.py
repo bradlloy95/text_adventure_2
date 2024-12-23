@@ -1,5 +1,7 @@
 import os
 import platform
+from initilize import initizile_objects
+
 from player import Player
 
 def start():
@@ -15,7 +17,7 @@ def start():
         user_input = input("> ")
         if user_input == "1":
             print("new game")
-            name = new_game()
+            player, locations = new_game()
             break
         elif user_input == "1":
             clear_terminal()
@@ -23,8 +25,8 @@ def start():
             break
     # start game opening - will be new function
     
-    print(f"Welcome to the shire {name}")
-    return name
+    print(f"Welcome to the shire {player.name}")
+    return player, locations
 def new_game():
     while True:
         clear_terminal()            
@@ -49,8 +51,10 @@ def new_game():
         
         if user_input == "1":
             clear_terminal()
+            locations = initizile_objects()
+            player = Player(user_name, locations[4])                      
             
-            return user_name
+            return player, locations
         elif user_input == "2":
             continue
         
